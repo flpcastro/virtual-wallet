@@ -16,11 +16,6 @@ func (s *TransferService) Transfer(amount int, debtorID, beneficiaryID uuid.UUID
 		return err
 	}
 
-	err = s.Repository.RemoveFromBalanceByUserID(amount, debtorID)
-	if err != nil {
-		return err
-	}
-
 	err = s.removeFromBalance(amount, debtorID)
 	if err != nil {
 		return err
@@ -28,6 +23,7 @@ func (s *TransferService) Transfer(amount int, debtorID, beneficiaryID uuid.UUID
 
 	err = s.topUpBalance(amount, beneficiaryID)
 	if err != nil {
+		s.Repository.Rollback()
 		return err
 	}
 
