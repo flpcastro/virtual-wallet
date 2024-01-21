@@ -9,6 +9,7 @@ import (
 
 func main() {
 	http.HandleFunc("/users/", money.UsersHandler)
+	http.HandleFunc("/transfer/", money.TranferHandler)
 
 	port := os.Getenv("API_PORT")
 	if port == "" {
